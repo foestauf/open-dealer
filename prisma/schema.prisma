@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  id    String @id @default(uuid())
+  name  String
+  short String
+  suit  Suit
+  value Int
+  decks Deck[]
+}
+
+model Shoe {
+  id        String   @id @default(uuid())
+  decks     Deck[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Deck {
+  id        String   @id @default(uuid())
+  cards     Card[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Shoe      Shoe?    @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  shoeId    String?
+}
+
+enum Suit {
+  CLUBS
+  DIAMONDS
+  HEARTS
+  SPADES
+}
