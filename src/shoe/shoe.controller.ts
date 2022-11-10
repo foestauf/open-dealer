@@ -1,13 +1,5 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseInterceptors,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { ShoeSizeDecorator, ShoeSizeInterceptor } from './shoe.decorator';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ShoeSizeDecorator } from './shoe.decorator';
 import { ShoeService } from './shoe.service';
 
 @Controller('shoes')
