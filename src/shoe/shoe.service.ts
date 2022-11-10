@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Card } from '@prisma/client';
-import { forEach, sampleSize } from 'lodash';
+import { sampleSize } from 'lodash';
 import { PrismaService } from 'src/prisma.service';
 import { DeckService } from '../deck/deck.service';
 
