@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { ShoeSizeDecorator, ShoeSizeInterceptor } from './shoe.decorator';
 import { ShoeService } from './shoe.service';
 
 @Controller('shoes')
@@ -10,13 +19,18 @@ export class ShoeController {
     return this.shoeService.createShoe(numberOfDecks);
   }
 
-  @Get(':id')
-  async getShoeById(@Param('id') id: string) {
+  @Get(':shoeId')
+  @ShoeSizeDecorator()
+  async getShoeById(@Param('shoeId') id: string) {
     return this.shoeService.getShoeById(id);
   }
 
-  @Post(':id/deal')
-  async dealCards(@Body('count') count: number, @Param('id') shoeId: string) {
+  @Post(':shoeId/deal')
+  @ShoeSizeDecorator()
+  async dealCards(
+    @Body('count') count: number,
+    @Param('shoeId') shoeId: string,
+  ) {
     return this.shoeService.dealCards(shoeId, count);
   }
 

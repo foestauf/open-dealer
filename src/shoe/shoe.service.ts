@@ -48,6 +48,11 @@ export class ShoeService {
       include: {
         decks: {
           include: {
+            _count: {
+              select: {
+                cards: true,
+              },
+            },
             cards: true,
           },
         },
@@ -56,7 +61,7 @@ export class ShoeService {
   }
 
   async dealCards(shoeId: string, count: number) {
-    let cardsToPull: Card[] = [];
+    const cardsToPull: Card[] = [];
     return this.prisma.$transaction(async (tx) => {
       const deckMap = new Map();
 
