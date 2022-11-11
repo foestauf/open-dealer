@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TableService } from './table.service';
 import { PrismaService } from '../prisma.service';
 import { TableController } from './table.controller';
-import { ShoeService } from '../shoe/shoe.service';
 import { ShoeModule } from '../shoe/shoe.module';
 @Module({
   imports: [ShoeModule],
