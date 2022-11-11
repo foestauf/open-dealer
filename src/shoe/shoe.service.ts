@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Card } from '@prisma/client';
 import { sampleSize } from 'lodash';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
 import { DeckService } from '../deck/deck.service';
 
 @Injectable()
@@ -77,7 +77,6 @@ export class ShoeService {
       });
 
       // combine all the cards in the shoe
-      console.log('shoe', shoe);
       const cards: Card[] = shoe.decks.reduce(
         (acc, deck) => [...acc, ...deck.cards],
         [],
