@@ -35,4 +35,9 @@ export class TableController {
   async deal(@Param('tableId') tableId: string, @Body() data) {
     return await this.tableService.deal(tableId, data);
   }
+
+  @Post(':tableId/endHand')
+  async endHand(@Param('tableId') tableId: string) {
+    return this.tableService.endHand(tableId);
+  }
 }

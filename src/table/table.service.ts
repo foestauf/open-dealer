@@ -122,4 +122,20 @@ export class TableService {
     });
     return seat;
   }
+
+  async endHand(tableId: string) {
+    await this.prisma.seat.updateMany({
+      where: {
+        tableId,
+      },
+      data: {
+        hand: [],
+        bet: 0,
+      },
+    });
+    return this.prisma.table.findUnique({
+      where: { id: tableId },
+      include: { Seat: true },
+    });
+  }
 }
