@@ -25,6 +25,7 @@ model Shoe {
   decks     Deck[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Table     Table?
 }
 
 model Deck {
@@ -34,6 +35,43 @@ model Deck {
   updatedAt DateTime @updatedAt
   Shoe      Shoe?    @relation(fields: [shoeId], references: [id], onDelete: Cascade)
   shoeId    String?
+}
+
+model Table {
+  id          String       @id @default(uuid())
+  name        String?
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Shoe        Shoe?        @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  shoeId      String?      @unique
+  TableConfig TableConfig?
+  Seat        Seat[]
+}
+
+model TableConfig {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Table      Table?   @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  tableId    String?  @unique
+  minBet     Int
+  maxBet     Int
+  minPlayers Int
+  maxPlayers Int
+}
+
+model Seat {
+  id         String   @id @default(uuid())
+  seatNumber Int
+  chips      Int      @default(0)
+  bet        Int      @default(0)
+  hand       String[] @default([])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Table      Table?   @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  tableId    String?
+  externalId String   @default("")
 }
 
 enum Suit {

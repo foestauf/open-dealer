@@ -77,7 +77,6 @@ export class ShoeService {
       });
 
       // combine all the cards in the shoe
-      console.log('shoe', shoe);
       const cards: Card[] = shoe.decks.reduce(
         (acc, deck) => [...acc, ...deck.cards],
         [],
