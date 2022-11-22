@@ -2,6 +2,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { ShoeService } from '../shoe/shoe.service';
 import { TableService } from './table.service';
+import { table } from '../fixtures/table';
 
 describe('TableService', () => {
   let service: TableService;
@@ -19,7 +20,7 @@ describe('TableService', () => {
               create: jest.fn(),
               findMany: jest.fn(),
               findUnique: jest.fn(),
-              update: jest.fn(),
+              update: jest.fn().mockResolvedValue(table),
               delete: jest.fn(),
             },
             seat: {
@@ -43,5 +44,39 @@ describe('TableService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('updateTable', () => {
+    it('should update a table', async () => {
+      const updateTableDto = {
+        name: 'Table 1',
+        description: 'Table 1',
+        config: {
+          minBet: 5,
+          maxBet: 500,
+          minPlayers: 1,
+          maxPlayers: 6,
+        },
+      };
+
+      const result = await service.updateTable('1', updateTableDto);
+
+      expect(result).toEqual(table);
+      expect(prisma.table.update).toHaveBeenCalledWith({
+        where: {
+          id: '1',
+        },
+        data: {
+          name: 'Table 1',
+          description: 'Table 1',
+          config: {
+            minBet: 5,
+            maxBet: 500,
+            minPlayers: 1,
+            maxPlayers: 6,
+          },
+        },
+      });
+    });
   });
 });
