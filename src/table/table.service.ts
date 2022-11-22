@@ -81,15 +81,36 @@ export class TableService {
   }
 
   async updateTable(id: string, data: UpdateTableDto) {
-    return await this.prisma.table.update({ where: { id }, data });
+    return this.prisma.table.update({ where: { id }, data });
   }
 
   async updateSeat(seatId: string, data: UpdateSeatDto) {
-    return await this.prisma.seat.update({
+    return this.prisma.seat.update({
       where: {
         id: seatId,
       },
       data,
+    });
+  }
+
+  async seatPlayer(tableId: string, externalId: string) {
+    const table = await this.prisma.table.findUnique({
+      where: { id: tableId },
+      include: {
+        Seat: true,
+      },
+    });
+    const seat = table.Seat.find((seat) => !seat.externalId);
+    if (!seat) {
+      throw new Error('No seats available');
+    }
+    return this.prisma.seat.update({
+      where: {
+        id: seat.id,
+      },
+      data: {
+        externalId,
+      },
     });
   }
 

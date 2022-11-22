@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { TableService } from './table.service';
 import { UpdateTableDto } from './dto/update-table';
+import { SeatPlayerDto } from './dto/seat-player';
 
 @Controller('tables')
 export class TableController {
@@ -29,6 +30,14 @@ export class TableController {
   @Patch(':tableId/seats/:seatId')
   async updateSeat(@Param('seatId') seatId: string, @Body() data) {
     return await this.tableService.updateSeat(seatId, data);
+  }
+
+  @Post(':tableId/seats')
+  async seatPlayer(
+    @Param('tableId') tableId: string,
+    @Body() body: SeatPlayerDto,
+  ) {
+    return await this.tableService.seatPlayer(tableId, body.externalId);
   }
 
   @Post(':tableId/deal')
