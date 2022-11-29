@@ -8,5 +8,8 @@ export class UpdateSeatDto {
   hand?: string;
 
   @IsNumber()
+  chips: number;
+
+  @IsNumber()
   externalId?: string;
 }

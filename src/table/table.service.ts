@@ -109,7 +109,7 @@ export class TableService {
         Seat: true,
       },
     });
-    const seat = table.Seat.find((seat) => !seat.externalId);
+    const seat = table.Seat.find((seat) => !seat.externalId && !seat.isDealer);
     if (!seat) {
       throw new Error('No seats available');
     }
