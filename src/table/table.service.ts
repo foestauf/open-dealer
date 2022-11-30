@@ -16,7 +16,7 @@ export class TableService {
   async createTable(data: CreateTableDto) {
     // Create Shoe ahead of time
     const shoe = await this.shoeService.createShoe(8);
-    return await this.prisma.table.create({
+    const newTable = await this.prisma.table.create({
       data: {
         name: data.name,
         description: data.description,
@@ -57,6 +57,15 @@ export class TableService {
         },
       },
     });
+    // Dealer seat is special and we must add it seperately
+    await this.prisma.seat.create({
+      data: {
+        tableId: newTable.id,
+        seatNumber: 0,
+        isDealer: true,
+      },
+    });
+    return newTable;
   }
 
   async getTable(id: string) {
@@ -100,7 +109,7 @@ export class TableService {
         Seat: true,
       },
     });
-    const seat = table.Seat.find((seat) => !seat.externalId);
+    const seat = table.Seat.find((seat) => !seat.externalId && !seat.isDealer);
     if (!seat) {
       throw new Error('No seats available');
     }
@@ -115,6 +124,7 @@ export class TableService {
   }
 
   async deal(tableId: string, data: DealSeatDto) {
+    let initialSeat;
     const table = await this.prisma.table.findUnique({
       where: { id: tableId },
       include: {
@@ -122,10 +132,15 @@ export class TableService {
         Shoe: true,
       },
     });
-    // get seat from table response
-    const initialSeat = table.Seat.find(
-      (seat) => seat.seatNumber === data.seat,
-    );
+    if (data.seat === 'dealer') {
+      initialSeat = table.Seat.find((seat) => seat.isDealer);
+      if (!initialSeat) {
+        throw new Error('No dealer seat');
+      }
+    } else {
+      // get seat from table response
+      initialSeat = table.Seat.find((seat) => seat.seatNumber === data.seat);
+    }
 
     const cardsDealt = await this.shoeService.dealCards(
       table.Shoe.id,

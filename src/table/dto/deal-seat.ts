@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 export class DealSeatDto {
   @IsNumber()
   @IsNotEmpty()
-  seat: number;
+  seat: number | string;
 
   @IsNumber()
   @IsNotEmpty()

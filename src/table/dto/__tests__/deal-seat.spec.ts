@@ -7,7 +7,7 @@ describe('deal-seat dto', () => {
     expect(new DealSeatDto()).toBeDefined();
   });
 
-  it('should throw an error if seat is not a number', async () => {
+  it('should throw an error if seat is undefined', async () => {
     const dealSeatInfo = {
       numberOfCards: 1,
     };

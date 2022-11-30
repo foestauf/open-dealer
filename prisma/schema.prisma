@@ -65,6 +65,7 @@ model Seat {
   id         String   @id @default(uuid())
   seatNumber Int
   chips      Int      @default(0)
+  isDealer   Boolean  @default(false)
   bet        Int      @default(0)
   hand       String[] @default([])
   createdAt  DateTime @default(now())
