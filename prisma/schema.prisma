@@ -14,9 +14,8 @@ datasource db {
 model Card {
   id    String @id @default(uuid())
   name  String
-  short String
   suit  Suit
-  value Int
+  value String
   decks Deck[]
 }
 
@@ -67,12 +66,12 @@ model Seat {
   chips      Int      @default(0)
   isDealer   Boolean  @default(false)
   bet        Int      @default(0)
-  hand       String[] @default([])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   Table      Table?   @relation(fields: [tableId], references: [id], onDelete: Cascade)
   tableId    String?
   externalId String   @default("")
+  hand       Json[]
 }
 
 enum Suit {
