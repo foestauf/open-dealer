@@ -55,7 +55,7 @@ describe('DeckService', () => {
   describe('resetDeck', () => {
     it('should reset a deck', async () => {
       const deck = await service.createDeck();
-      const cards = await service.dealCards(deck.id, 5);
+      await service.dealCards(deck.id, 5);
       const resetDeck = await service.resetDeck(deck.id);
       expect(resetDeck.cards).toHaveLength(52);
     });

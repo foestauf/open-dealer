@@ -158,7 +158,7 @@ export class TableService {
     return cardsDealt;
   }
 
-  async endHand(tableId: string) {
+  async endRound(tableId: string) {
     await this.prisma.seat.updateMany({
       where: {
         tableId,
