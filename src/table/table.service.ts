@@ -147,7 +147,7 @@ export class TableService {
       data.numberOfCards,
     );
     const hand = initialSeat.hand;
-    const seat = await this.prisma.seat.update({
+    await this.prisma.seat.update({
       where: {
         id: initialSeat.id,
       },
@@ -155,7 +155,7 @@ export class TableService {
         hand: hand.concat(cardsDealt),
       },
     });
-    return seat;
+    return cardsDealt;
   }
 
   async endHand(tableId: string) {
