@@ -146,26 +146,25 @@ export class TableService {
       table.Shoe.id,
       data.numberOfCards,
     );
-    const cardCodes = cardsDealt.map((card) => card.short);
     const hand = initialSeat.hand;
-    const seat = await this.prisma.seat.update({
+    await this.prisma.seat.update({
       where: {
         id: initialSeat.id,
       },
       data: {
-        hand: hand.concat(cardCodes),
+        hand: hand.concat(cardsDealt),
       },
     });
-    return seat;
+    return cardsDealt;
   }
 
-  async endHand(tableId: string) {
+  async endRound(tableId: string) {
     await this.prisma.seat.updateMany({
       where: {
         tableId,
       },
       data: {
-        hand: [],
+        hand: { set: [] },
         bet: 0,
       },
     });
