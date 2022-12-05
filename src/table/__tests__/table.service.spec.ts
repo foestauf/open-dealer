@@ -1,8 +1,8 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import { PrismaService } from '../prisma.service';
-import { ShoeService } from '../shoe/shoe.service';
-import { TableService } from './table.service';
-import { table } from '../fixtures/table';
+import { PrismaService } from '../../prisma.service';
+import { ShoeService } from '../../shoe/shoe.service';
+import { TableService } from '../table.service';
+import { table } from '../../fixtures/table';
 
 describe('TableService', () => {
   let service: TableService;
@@ -19,7 +19,7 @@ describe('TableService', () => {
             table: {
               create: jest.fn(),
               findMany: jest.fn(),
-              findUnique: jest.fn(),
+              findUnique: jest.fn().mockResolvedValue(table),
               update: jest.fn().mockResolvedValue(table),
               delete: jest.fn(),
             },
@@ -75,6 +75,24 @@ describe('TableService', () => {
             minPlayers: 1,
             maxPlayers: 6,
           },
+        },
+      });
+    });
+  });
+
+  describe('getTable', () => {
+    it('should get a table', async () => {
+      const result = await service.getTable('1');
+
+      expect(result).toEqual(table);
+      expect(prisma.table.findUnique).toHaveBeenCalledWith({
+        where: {
+          id: '1',
+        },
+        include: {
+          Seat: true,
+          TableConfig: true,
+          Shoe: { include: { _count: { select: { decks: true } } } },
         },
       });
     });
