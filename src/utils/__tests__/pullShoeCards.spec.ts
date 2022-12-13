@@ -43,16 +43,4 @@ describe('pullShoeCards', () => {
     const count = 5;
     expect(() => pullShoeCards(shoe, count)).toThrow();
   });
-
-  it('should push cards into existing deck', () => {
-    const count = 2;
-    const { deckMap } = pullShoeCards(shoe, count);
-    expect(deckMap.get('1')).toHaveLength(1);
-  });
-
-  it('should create a new deck if it does not exist', () => {
-    const count = 2;
-    const { deckMap } = pullShoeCards(shoe, count);
-    expect(deckMap.get('2')).toHaveLength(1);
-  });
 });

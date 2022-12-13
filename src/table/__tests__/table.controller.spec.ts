@@ -1,8 +1,8 @@
 import { TestingModule, Test } from '@nestjs/testing';
-import { PrismaService } from '../prisma.service';
-import { TableController } from './table.controller';
-import { TableService } from './table.service';
-import { ShoeService } from '../shoe/shoe.service';
+import { PrismaService } from '../../prisma.service';
+import { TableController } from '../table.controller';
+import { TableService } from '../table.service';
+import { ShoeService } from '../../shoe/shoe.service';
 
 const db = {
   table: {
