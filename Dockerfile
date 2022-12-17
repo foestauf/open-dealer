@@ -1,6 +1,7 @@
 ###################
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
+ARG DATABASE_URL
 
 FROM node:18-alpine As development
 
@@ -51,4 +52,11 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
-CMD [ "node", "dist/main.js" ]
+RUN apk add --update --no-cache openssl1.1-compat
+
+RUN npx prisma generate
+
+ENV DATABASE_URL=$DATABASE_URL
+ENV PORT=${PORT:-80}
+
+CMD [ "node", "dist/src/main.js" ]
