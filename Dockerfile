@@ -7,6 +7,7 @@ FROM node:18-alpine As development
 WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
+COPY prisma ./prisma/
 
 RUN npm ci
 
@@ -28,6 +29,8 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
+RUN npx prisma generate
+
 RUN npm run build
 
 ENV NODE_ENV production
@@ -44,5 +47,7 @@ FROM node:18-alpine As production
 
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+
+RUN npx prisma migrate deploy
 
 CMD [ "node", "dist/main.js" ]
