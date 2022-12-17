@@ -33,9 +33,12 @@ jobs:
         tags: kahseeknow.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa5b5fe59cea421ba228c7312d8fcde6 }}/open-dealer:${{ github.sha }}
         file: ./Dockerfile
 
+  unit-tests:
+    uses: ./.github/workflows/tests.yml
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, unit-tests]
     environment:
       name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
