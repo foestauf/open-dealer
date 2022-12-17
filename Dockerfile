@@ -7,6 +7,7 @@ FROM node:18-alpine As development
 WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
+COPY prisma ./prisma/
 
 RUN npm ci
 
@@ -28,11 +29,15 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
+RUN apk add --update --no-cache openssl1.1-compat
+
+RUN npx prisma generate
+
 RUN npm run build
 
 ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 USER node
 
@@ -44,5 +49,6 @@ FROM node:18-alpine As production
 
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
 CMD [ "node", "dist/main.js" ]
