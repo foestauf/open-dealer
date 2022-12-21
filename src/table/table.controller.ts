@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { TableService } from './table.service';
 import { UpdateTableDto } from './dto/update-table';
 import { SeatPlayerDto } from './dto/seat-player';
@@ -9,27 +17,27 @@ export class TableController {
 
   @Post()
   async createTable(@Body() data) {
-    return await this.tableService.createTable(data);
+    return this.tableService.createTable(data);
   }
 
   @Get()
   async getTables() {
-    return await this.tableService.getTables();
+    return this.tableService.getTables();
   }
 
   @Get(':id')
   async getTable(@Param('id') id: string) {
-    return await this.tableService.getTable(id);
+    return this.tableService.getTable(id);
   }
 
   @Patch(':id')
   async updateTable(id: string, @Body() data: UpdateTableDto) {
-    return await this.tableService.updateTable(id, data);
+    return this.tableService.updateTable(id, data);
   }
 
   @Patch(':tableId/seats/:seatId')
   async updateSeat(@Param('seatId') seatId: string, @Body() data) {
-    return await this.tableService.updateSeat(seatId, data);
+    return this.tableService.updateSeat(seatId, data);
   }
 
   @Post(':tableId/seats')
@@ -37,16 +45,21 @@ export class TableController {
     @Param('tableId') tableId: string,
     @Body() body: SeatPlayerDto,
   ) {
-    return await this.tableService.seatPlayer(tableId, body.externalId);
+    return this.tableService.seatPlayer(tableId, body.externalId);
   }
 
   @Post(':tableId/deal')
   async deal(@Param('tableId') tableId: string, @Body() data) {
-    return await this.tableService.deal(tableId, data);
+    return this.tableService.deal(tableId, data);
   }
 
   @Post(':tableId/endRound')
   async endHand(@Param('tableId') tableId: string) {
     return this.tableService.endRound(tableId);
+  }
+
+  @Delete(':tableId')
+  async deleteTable(@Param('tableId') tableId: string) {
+    return this.tableService.deleteTable(tableId);
   }
 }

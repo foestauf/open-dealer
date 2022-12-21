@@ -69,7 +69,7 @@ export class TableService {
   }
 
   async getTable(id: string) {
-    return await this.prisma.table.findUnique({
+    return this.prisma.table.findUnique({
       where: { id },
       include: {
         Seat: true,
@@ -80,7 +80,7 @@ export class TableService {
   }
 
   async getTables() {
-    return await this.prisma.table.findMany({
+    return this.prisma.table.findMany({
       include: {
         Seat: true,
         TableConfig: true,
@@ -172,5 +172,9 @@ export class TableService {
       where: { id: tableId },
       include: { Seat: true },
     });
+  }
+
+  async deleteTable(id: string) {
+    return this.prisma.table.delete({ where: { id } });
   }
 }

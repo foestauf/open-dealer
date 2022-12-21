@@ -17,7 +17,7 @@ describe('TableService', () => {
           provide: PrismaService,
           useValue: {
             table: {
-              create: jest.fn(),
+              create: jest.fn().mockResolvedValue(table),
               findMany: jest.fn(),
               findUnique: jest.fn().mockResolvedValue(table),
               update: jest.fn().mockResolvedValue(table),
@@ -25,13 +25,17 @@ describe('TableService', () => {
             },
             seat: {
               updateMany: jest.fn(),
+              create: jest.fn(),
+            },
+            shoe: {
+              create: jest.fn().mockResolvedValue({ id: '1' }),
             },
           },
         },
         {
           provide: ShoeService,
           useValue: {
-            createShoe: jest.fn(),
+            createShoe: jest.fn().mockResolvedValue({ id: '1' }),
           },
         },
       ],
@@ -93,6 +97,29 @@ describe('TableService', () => {
           Seat: true,
           TableConfig: true,
           Shoe: { include: { _count: { select: { decks: true } } } },
+        },
+      });
+    });
+  });
+
+  describe('deleteTable', () => {
+    it('should delete a table', async () => {
+      const table = await service.createTable({
+        name: 'Table 1',
+        description: 'Table 1',
+        numberOfSeats: 6,
+        config: {
+          minBet: 5,
+          maxBet: 500,
+          minPlayers: 1,
+          maxPlayers: 6,
+        },
+      });
+      await service.deleteTable(table.id);
+
+      expect(prisma.table.delete).toHaveBeenCalledWith({
+        where: {
+          id: '1',
         },
       });
     });

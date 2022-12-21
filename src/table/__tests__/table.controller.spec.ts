@@ -48,4 +48,12 @@ describe('TableController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('should have service defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should have shoeService defined', () => {
+    expect(shoeService).toBeDefined();
+  });
 });
