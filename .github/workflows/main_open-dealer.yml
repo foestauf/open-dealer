@@ -39,6 +39,7 @@ jobs:
 
   unit-tests:
     uses: ./.github/workflows/tests.yml
+    secrets: inherit
 
   deploy:
     runs-on: ubuntu-latest
